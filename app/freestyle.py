@@ -5,6 +5,9 @@ import csv
 import os
 import matplotlib.pyplot as plt
 import matplotlib
+import pandas as pd
+import numpy as np
+
 
 def intro():
     print("----------------------------")
@@ -98,6 +101,18 @@ def savecsv():
     else:
         print("You have not chosen Yes nor No")
 
+def chart():
+    create_chart = input ("Do you want to create chart for stock price? Yes or No: ")
+    if create_chart.upper() == "YES":
+        my_data = pd.read_csv('data/stock_price.csv',index_col = 0)
+        array_data=np.array(my_data)
+        my_data.plot()
+        plt.show()
+    elif create_csv.upper()=="NO":
+        print ("Good bye!")
+    else:
+        print("You have not chosen Yes nor No. Good bye!")
+
 
 #APPLICATION below###########################
 # input symbol, start date and end date
@@ -117,5 +132,6 @@ elif choice == str(2):
     data = f.ix[str(datatype)]
     print(data)
     savecsv()
+    chart()
 else:
     print ("You have selected neither 1 nor 2")
