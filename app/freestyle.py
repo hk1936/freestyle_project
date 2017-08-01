@@ -60,7 +60,7 @@ def datatype():
 def savecsv():
     save_csv = input("Do you want to save this data into CSV? Yes or No:")
     if save_csv.upper()=="YES":
-        csv_file_path = "python_practice/stock_price.csv"
+        csv_file_path = "data/stock_price.csv"
         data.to_csv(csv_file_path)
         print ("Congratulation! Data is saved! File name 'stock_price.csv'")
     elif save_csv.upper()=="NO":
@@ -99,5 +99,3 @@ data = f.ix[str(datatype)]
 print(data)
 
 savecsv()
-
-chartcsv = "python_practice/stock_price.csv"
