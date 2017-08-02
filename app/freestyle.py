@@ -108,6 +108,7 @@ def chart():
         array_data=np.array(my_data)
         my_data.plot()
         plt.show()
+        print("Thank you!")
     elif create_csv.upper()=="NO":
         print ("Good bye!")
     else:
@@ -118,7 +119,7 @@ def chart():
 # input symbol, start date and end date
 intro()
 
-choice = input("1. Calculate simple change of a stock.\n2. Download stock price\nWhich do you choose?: ")
+choice = input("1. Calculate simple change of a stock price.\n2. Download stock price\nWhich do you choose?: ")
 if choice == str(1):
     change()
 elif choice == str(2):
@@ -133,5 +134,6 @@ elif choice == str(2):
     print(data)
     savecsv()
     chart()
+    print ("Good Bye!")
 else:
     print ("You have selected neither 1 nor 2")
