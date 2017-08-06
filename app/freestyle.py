@@ -1,11 +1,9 @@
 import pandas_datareader.data as web
+import pandas as pd
 from datetime import date, timedelta
 import datetime
 import csv
-import os
 import matplotlib.pyplot as plt
-import matplotlib
-import pandas as pd
 import numpy as np
 
 
@@ -30,8 +28,8 @@ def change():
     tickers.append(str(response_ticker))
     sd = input ("What is the start date, please choose WEEKDAY? Type in YYYYMMDD format: ")
     ed= input ("What is the end date, please choose WEEKDAY? Type in YYYYMMDD format: ")
-    datasource = "google"
-    datatype = "Close"
+    datasource = "yahoo"
+    datatype = "Adj Close"
     start = datetime.datetime(int(sd[:4]),int(sd[4:6]), int(sd[-2:]))
     end = datetime.datetime(int(ed[:4]),int(ed[4:6]), int(ed[-2:]))
     response_startprice = web.DataReader(tickers,datasource, start, start)
@@ -39,7 +37,7 @@ def change():
     start_data = response_startprice.ix[str(datatype)]
     end_data = response_endprice.ix[str(datatype)]
     pct_change = (((end_data.values /start_data.values - 1))*100)[0][0]
-    print ("Your stock has changed...")
+    print (tickers[0],"'s stock price has changed...")
     print (format(pct_change, '.2f'),"%")
 
 
