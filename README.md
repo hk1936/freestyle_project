@@ -7,4 +7,5 @@ The application will allow users to output stock information after answering a f
 Give the application a try and let me know how it works for you!
 Please run app/freestyle.py in order to use this application.
 
-Note: Please make sure to run this program in Python 3!
+Note: Please make sure to run this program in Python 3.0 x or higher!
+Note: Please make sure to install pandas and matplotlib
