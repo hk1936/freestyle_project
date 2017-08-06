@@ -10,11 +10,13 @@ import numpy as np
 
 
 def intro():
-    print("----------------------------")
-    print("Stock price download Application")
-    print("----------------------------")
-    print("Hello "+os.getlogin())
     menu = """
+    ---------------------------------
+    Stock price download Application
+    ---------------------------------
+
+    Hello there!
+
     Welcome to the stock price download application!
 
     Please follow the steps to either calculate stock return or download/create spreadsheet for stock price!
@@ -22,13 +24,12 @@ def intro():
     """
     print (menu)
 
-
 def change():
     tickers=[]
     response_ticker = input("What is the ticker you would like to calculate the return?  ")
     tickers.append(str(response_ticker))
-    sd = input ("What is the start date? Type in YYYYMMDD format: ")
-    ed= input ("What is the end date? Type in YYYYMMDD format: ")
+    sd = input ("What is the start date, please choose WEEKDAY? Type in YYYYMMDD format: ")
+    ed= input ("What is the end date, please choose WEEKDAY? Type in YYYYMMDD format: ")
     datasource = "google"
     datatype = "Close"
     start = datetime.datetime(int(sd[:4]),int(sd[4:6]), int(sd[-2:]))
@@ -51,7 +52,7 @@ def datasource():
         datasource = "yahoo"
     else:
         print("Please choose either from GOOGLE or YAHOO")
-        datasource()
+        quit()
     return datasource
 
 def create_tickerlist(tickers): #create tickers
@@ -62,6 +63,7 @@ def create_tickerlist(tickers): #create tickers
             break
         else:
             tickers.append(str(ticker))
+            print("You have chosen...", (tickers))
 
 def datetype():
     datetype = input ("Specify date range.\n If you want to download most current data, type 'C'.\n If you want 'relative day' data from today, type in 'R'. \n If you want to specify 'exact date range' type in 'E'\n")
@@ -82,58 +84,53 @@ def datetype():
         end = datetime.datetime(int(ed[:4]),int(ed[4:6]), int(ed[-2:]))
     else:
         print ("You did not enter neither R nor E, please try again from the beginning.")
-        datetype()
+        quit()
     return start, end
 
 def datatype():
-    datatype = input ("Specify data type. \n Choose from Open, High, Low, Close, Volume\n")
-    datatype = datatype.capitalize()
+    datatype = input ("Specify data type. \n Choose from Open, High, Low, Close, Adj Close (Yahoo Finance only), Volume\n")
+    datatype = datatype.title()
     return datatype
 
-def savecsv():
-    save_csv = input("Do you want to save this data into CSV? Yes or No:")
-    if save_csv.upper()=="YES":
-        csv_file_path = "data/stock_price.csv"
-        data.to_csv(csv_file_path)
-        print ("Congratulation! Data is saved! File name 'stock_price.csv'")
-    elif save_csv.upper()=="NO":
-        print("We have not saved data")
-    else:
-        print("You have not chosen Yes nor No")
 
 def chart():
     create_chart = input ("Do you want to create chart for stock price? Yes or No: ")
     if create_chart.upper() == "YES":
+
         my_data = pd.read_csv('data/stock_price.csv',index_col = 0)
         array_data=np.array(my_data)
         my_data.plot()
         plt.show()
-        print("Thank you!")
-    elif create_csv.upper()=="NO":
-        print ("Good bye!")
+        plt.close()
+    elif create_chart.upper()=="NO":
+        print ("Ok, No chart is created!")
     else:
         print("You have not chosen Yes nor No. Good bye!")
 
 
-#APPLICATION below###########################
+#User Application
 # input symbol, start date and end date
-intro()
+def run():
+    intro()
+    choice = input("1. Calculate simple change of a stock price.\n2. Download stock price\n\nWhich do you choose? 1 or 2: ")
+    if choice == str(1):
+        change()
+    elif choice == str(2):
+        tickers = []
+        source = datasource()
+        create_tickerlist(tickers)
+        start, end = datetype()
+        data_type = datatype()
+        #output
+        f = web.DataReader(tickers,source.lower(), start, end)
+        data = f.ix[str(data_type)]
+        print(data)
+        csv_file_path = "data/stock_price.csv"
+        data.to_csv(csv_file_path)
+        chart()
+        print ("Good Bye!")
+    else:
+        print ("You have selected neither 1 nor 2.\nPlease re-run the application")
 
-choice = input("1. Calculate simple change of a stock price.\n2. Download stock price\nWhich do you choose?: ")
-if choice == str(1):
-    change()
-elif choice == str(2):
-    tickers = []
-    datasource = datasource()
-    create_tickerlist(tickers)
-    start, end = datetype()
-    datatype = datatype()
-    #output
-    f = web.DataReader(tickers,datasource.lower(), start, end)
-    data = f.ix[str(datatype)]
-    print(data)
-    savecsv()
-    chart()
-    print ("Good Bye!")
-else:
-    print ("You have selected neither 1 nor 2")
+if __name__ == "__main__":
+    run()
